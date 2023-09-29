@@ -1,3 +1,4 @@
 
 
-#gtest_discover_tests(hello_test)
+
+include("${CMAKE_CURRENT_LIST_DIR}/tests/CMakeLists.txt")
