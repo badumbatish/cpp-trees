@@ -13,5 +13,5 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
+include(GoogleTest)
 include("${CMAKE_CURRENT_LIST_DIR}/src/CMakeLists.txt")
