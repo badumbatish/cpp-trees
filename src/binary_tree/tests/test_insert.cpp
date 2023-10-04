@@ -7,5 +7,5 @@
 TEST(INSERTION, basic_insert) {
     binary_tree basic_tree = binary_tree();
     basic_tree.insert(1 ,1);
-    ASSERT_EQ(basic_tree.find(1), 1);
+    ASSERT_EQ(basic_tree.contains(1), true);
 }
