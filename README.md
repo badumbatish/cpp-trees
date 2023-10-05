@@ -21,3 +21,12 @@ Run
 cd build && ctest && cd ..
 ```
 to go to build folder and test and return to root.
+
+### For Mac
+
+Run
+```bash
+leaks -atExit -- build/Your_test      
+```
+
+to check for leakage, remember to replace Your_test with the executable

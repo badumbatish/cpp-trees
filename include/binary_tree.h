@@ -15,11 +15,14 @@ private:
     std::shared_ptr<binary_tree<K, V>> left_tree, right_tree;
 public:
     binary_tree<K, V>();
+    ~binary_tree<K, V>();
     void insert(K key, V value);
     bool contains(K key);
     std::optional<V> find(K key);
 
     int64_t size();
+
+
 };
 
 template<typename K, typename V>
@@ -90,4 +93,8 @@ std::optional<V> binary_tree<K, V>::find(K key) {
     }
 }
 
+template<typename K, typename V>
+binary_tree<K, V>::~binary_tree() {
+
+}
 #endif //CPP_TREES_BINARY_TREE_H
