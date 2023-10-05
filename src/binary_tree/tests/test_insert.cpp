@@ -26,10 +26,10 @@ TEST(INSERTION, automatic_identity_insert) {
 TEST(INSERTION, automatic_randomized_insert) {
     binary_tree basic_tree = binary_tree<int, int>();
     for (int i = 0; i < 100000; i++) {
-        int rand = std::rand();
-        basic_tree.insert(rand, i);
-        ASSERT_EQ(basic_tree.contains(rand), true);
-        ASSERT_EQ(basic_tree.find(rand).value(), i);
+        int random_num = rand();
+        basic_tree.insert(random_num, i);
+        ASSERT_EQ(basic_tree.contains(random_num), true);
+        ASSERT_EQ(basic_tree.find(random_num).value(), i);
     }
 
     ASSERT_EQ(basic_tree.size(), 100000);
