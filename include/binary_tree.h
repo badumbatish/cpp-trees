@@ -16,7 +16,20 @@ public:
     void insert(K key, V value);
     bool contains(K key);
     std::optional<V> find(K key);
+
+    int64_t size();
 };
+
+template<typename K, typename V>
+int64_t binary_tree<K, V>::size() {
+    int64_t tempSize {};
+
+    if (this->key.has_value()) tempSize += 1;
+    if (left_tree != nullptr) tempSize += left_tree->size();
+    if (right_tree != nullptr) tempSize += right_tree->size();
+
+    return tempSize;
+}
 
 template<typename K, typename V>
 binary_tree<K, V>::binary_tree() {

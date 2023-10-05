@@ -19,6 +19,8 @@ TEST(INSERTION, automatic_identity_insert) {
         ASSERT_EQ(basic_tree.contains(i), true);
         ASSERT_EQ(basic_tree.find(i).value(), i);
     }
+
+    ASSERT_EQ(basic_tree.size(), 1000);
 }
 
 TEST(INSERTION, automatic_randomized_insert) {
@@ -29,4 +31,6 @@ TEST(INSERTION, automatic_randomized_insert) {
         ASSERT_EQ(basic_tree.contains(rand), true);
         ASSERT_EQ(basic_tree.find(rand).value(), i);
     }
+
+    ASSERT_EQ(basic_tree.size(), 100000);
 }
