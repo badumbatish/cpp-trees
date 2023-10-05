@@ -4,6 +4,10 @@ project(cpp_trees)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_program(MEMORYCHECK_COMMAND valgrind)
+set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
+
+
 include(FetchContent)
 FetchContent_Declare(
         googletest
