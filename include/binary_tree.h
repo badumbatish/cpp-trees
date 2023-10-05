@@ -4,13 +4,14 @@
 #ifndef CPP_TREES_BINARY_TREE_H
 #define CPP_TREES_BINARY_TREE_H
 
-
+template<typename K, typename V>
 class binary_tree {
 private:
-    int key, value;
-    binary_tree *left_tree, *right_tree;
+    K key;
+    V value;
+    binary_tree<K, V> *left_tree, *right_tree;
 public:
-    binary_tree();
+    binary_tree<K, V>();
     void insert(int key, int value);
     bool contains(int key);
     int find(int key);
