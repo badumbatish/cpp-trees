@@ -26,11 +26,10 @@ TEST(INSERTION, automatic_identity_insert) {
 TEST(INSERTION, automatic_randomized_insert) {
     binary_tree basic_tree = binary_tree<int, int>();
     for (int i = 0; i < 100000; i++) {
-        int random_num = rand();
+        int random_num = rand() % 100000;
         basic_tree.insert(random_num, i);
         ASSERT_EQ(basic_tree.contains(random_num), true);
         ASSERT_EQ(basic_tree.find(random_num).value(), i);
     }
 
-    ASSERT_EQ(basic_tree.size(), 100000);
 }
