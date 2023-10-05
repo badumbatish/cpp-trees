@@ -27,6 +27,8 @@ public:
     std::optional<V> find(K key);
 
     int64_t size();
+
+    std::optional<V> erase(K key);
 };
 
 /*
@@ -62,6 +64,11 @@ bool binary_tree<K, V>::contains(K key) {
 template<typename K, typename V>
 std::optional<V> binary_tree<K, V>::find(K key) {
     return binary_tree_node<K, V>::find(n, key);
+}
+
+template<typename K, typename V>
+std::optional<V> binary_tree<K, V>::erase(K key) {
+    return binary_tree_node<K, V>::erase(n, key);
 }
 
 template<typename K, typename V>

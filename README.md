@@ -18,7 +18,7 @@ at the root tree to build the build files.
 
 Run
 ```bash
-cd build && ctest && cd ..
+cd build && ctest --output-on-failure && cd ..
 ```
 to go to build folder and test and return to root.
 
