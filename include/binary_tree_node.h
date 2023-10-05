@@ -26,7 +26,7 @@ public:
 };
 
 /*
- * PRIVATE METHOD
+ * PUBLIC METHOD
  */
 
 template<typename K, typename V>
