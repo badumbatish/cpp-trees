@@ -10,7 +10,7 @@ class binary_tree {
 private:
     std::optional<K> key;
     std::optional<V> value;
-    binary_tree<K, V> *left_tree, *right_tree;
+    std::shared_ptr<binary_tree<K, V>> left_tree, right_tree;
 public:
     binary_tree<K, V>();
     void insert(K key, V value);
@@ -46,12 +46,12 @@ void binary_tree<K, V>::insert(K key, V value) {
         this->value = value;
     } else if (this->key.value() < key) {
         if (this->left_tree == nullptr) {
-            this->left_tree = new binary_tree;
+            this->left_tree = std::make_shared<binary_tree>();
         }
         this->left_tree->insert(key, value);
     } else {
         if (this->right_tree == nullptr) {
-            this->right_tree = new binary_tree;
+            this->right_tree = std::make_shared<binary_tree>();
         }
         this->right_tree->insert(key, value);
     }
