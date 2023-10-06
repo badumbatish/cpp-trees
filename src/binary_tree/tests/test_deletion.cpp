@@ -18,4 +18,41 @@ TEST(DELETION, no_child_deletion) {
     ASSERT_EQ(basic_tree.size(), 2);
     basic_tree.erase(2);
     ASSERT_EQ(basic_tree.size(), 1);
+
+    basic_tree.insert(1, 1);
+    basic_tree.insert(2, 2);
+    basic_tree.insert(3, 3);
+    basic_tree.erase(2);
+    basic_tree.erase(3);
+    ASSERT_EQ(basic_tree.size(), 1);
+
+    basic_tree.erase(2);
+    ASSERT_EQ(basic_tree.size(), 1);
+}
+
+TEST(DELETION, full_child_deletion_simple) {
+    binary_tree basic_tree = binary_tree<int, int>();
+    basic_tree.insert(2 ,2);
+    ASSERT_EQ(basic_tree.size(), 1);
+    basic_tree.insert(1 ,1);
+    basic_tree.insert(3 ,3);
+    // 1 - 2 - 3
+
+    ASSERT_EQ(basic_tree.erase(2), 2);
+    ASSERT_EQ(basic_tree.size(), 2);
+
+}
+
+TEST(DELETION, full_child_deletion_size_4) {
+    binary_tree basic_tree = binary_tree<int, int>();
+    basic_tree.insert(2 ,2);
+    ASSERT_EQ(basic_tree.size(), 1);
+    basic_tree.insert(1 ,1);
+    basic_tree.insert(4 ,4);
+    basic_tree.insert(3, 3);
+    // 1 - 2 - 4 - 3
+
+    ASSERT_EQ(basic_tree.erase(2), 2);
+    ASSERT_EQ(basic_tree.size(), 3);
+
 }
