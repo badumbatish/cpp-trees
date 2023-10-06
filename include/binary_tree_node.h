@@ -14,7 +14,7 @@ class binary_tree_node {
     std::optional<V> value;
     std::shared_ptr<binary_tree_node> left_tree, right_tree;
 public:
-    static void insert(const std::shared_ptr<binary_tree_node> &n, K key, V value);
+    static void insert(std::shared_ptr<binary_tree_node> &n, K key, V value);
 
     static bool contains(const std::shared_ptr<binary_tree_node> &n, K key);
 
@@ -69,19 +69,16 @@ bool binary_tree_node<K, V>::contains(const std::shared_ptr<binary_tree_node> &n
 }
 
 template<typename K, typename V>
-void binary_tree_node<K, V>::insert(const std::shared_ptr<binary_tree_node>  &n, K key, V value) {
+void binary_tree_node<K, V>::insert(std::shared_ptr<binary_tree_node>  &n, K key, V value) {
+    if (n == nullptr) {
+        n = std::make_shared<binary_tree_node<K, V>>();
+    }
     if (n->key == std::nullopt || n->key.value() == key) {
         n->key = std::make_optional(key);
         n->value = value;
     } else if (n->key.value() < key) {
-        if (n->left_tree == nullptr) {
-            n->left_tree = std::make_shared<binary_tree_node>();
-        }
         insert(n->left_tree, key, value);
     } else {
-        if (n->right_tree == nullptr) {
-            n->right_tree = std::make_shared<binary_tree_node>();
-        }
         insert(n->right_tree, key, value);
     }
 }

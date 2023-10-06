@@ -15,7 +15,7 @@ TEST(DELETION, no_child_deletion) {
 
     basic_tree.insert(1, 1);
     basic_tree.insert(2, 2);
-
+    ASSERT_EQ(basic_tree.size(), 2);
     basic_tree.erase(2);
     ASSERT_EQ(basic_tree.size(), 1);
 }
