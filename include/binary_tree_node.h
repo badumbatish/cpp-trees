@@ -10,143 +10,128 @@
 
 template<typename K, typename V>
 class binary_tree_node {
-    std::optional<K> key;
-    std::optional<V> value;
-    std::shared_ptr<binary_tree_node> left_tree, right_tree;
+    K key;
+    V value;
+    std::unique_ptr<binary_tree_node> left_tree, right_tree;
 public:
-    static void insert(std::shared_ptr<binary_tree_node> &n, K key, V value);
+    binary_tree_node(K key, V value) : key(key), value(value) {}
+    void insert(K key, V value);
 
-    static bool contains(const std::shared_ptr<binary_tree_node> &n, K key);
+    bool contains(K key);
 
-    static std::optional<V> find(const std::shared_ptr<binary_tree_node> &n, K key);
+    std::optional<V> find(K key);
 
-    static int64_t size(std::shared_ptr<binary_tree_node> n);
+    int64_t size();
 
-    static std::optional<V> erase(std::shared_ptr<binary_tree_node> &n, K key);
-    static std::shared_ptr<binary_tree_node> find_smallest_before(std::shared_ptr<binary_tree_node> n, std::shared_ptr<binary_tree_node> comp);
+    static std::optional<V> erase(std::unique_ptr<binary_tree_node<K, V>> &n, K key);
+    static std::unique_ptr<binary_tree_node<K, V>> find_leftmost(std::unique_ptr<binary_tree_node<K, V>> &n);
+    static std::unique_ptr<binary_tree_node<K, V>> find_rightmost(std::unique_ptr<binary_tree_node<K, V>> &n);
+
 private:
-    static std::shared_ptr<binary_tree_node> find_smallest(const std::shared_ptr<binary_tree_node> &n);
+
 };
 
 template<typename K, typename V>
-std::shared_ptr<binary_tree_node<K, V>> binary_tree_node<K, V>::find_smallest_before(std::shared_ptr<binary_tree_node> n,
-                                                                               std::shared_ptr<binary_tree_node> comp) {
-    if (n->left_tree == comp) return n;
-    return find_smallest_before(n->left_tree, comp);
+std::unique_ptr<binary_tree_node<K, V>>
+binary_tree_node<K, V>::find_leftmost(std::unique_ptr<binary_tree_node<K, V>> &n) {
+    if (n == nullptr) return nullptr;
+    else if (n->left_tree == nullptr) return std::move(n);
+    return find_leftmost(n->left_tree);
 }
 
 template<typename K, typename V>
-std::shared_ptr<binary_tree_node<K, V>>
-binary_tree_node<K, V>::find_smallest(const std::shared_ptr<binary_tree_node> &n) {
-    if (n -> left_tree == nullptr) return n;
-    return find_smallest(n->left_tree);
+std::unique_ptr<binary_tree_node<K, V>>
+binary_tree_node<K, V>::find_rightmost(std::unique_ptr<binary_tree_node<K, V>> &n) {
+    if (n == nullptr) std::move(n);
+    else if (n->right_tree == nullptr) std::move(n);
+    return find_rightmost(n->right_tree);
 }
-
 /*
  * PUBLIC METHOD
  */
 template<typename K, typename V>
-int64_t binary_tree_node<K, V>::size(std::shared_ptr<binary_tree_node> n) {
-    int64_t tempSize{};
-    if (n == nullptr) return 0;
-    if (n->key.has_value()) tempSize += 1;
-    tempSize += size(n->left_tree);
-    tempSize += size(n->right_tree);
+int64_t binary_tree_node<K, V>::size() {
+    int64_t tempSize{1};
+
+    tempSize += this->left_tree ? this->left_tree->size() : 0;
+    tempSize += this->right_tree ? this->right_tree->size() : 0;
 
     return tempSize;
 }
 
 template<typename K, typename V>
-std::optional<V> binary_tree_node<K, V>::find(const std::shared_ptr<binary_tree_node> &n, K key) {
-    if (n == nullptr || n->key == std::nullopt) {
-        return std::nullopt;
-    } else if (n->key.value() == key) {
-        return n->value;
-    } else if (n->key.value() > key) {
-        return find(n->left_tree, key);
+std::optional<V> binary_tree_node<K, V>::find(K key) {
+    if (this->key == key) {
+        return this->value;
+    } else if (this->key > key) {
+        return this->left_tree ? this->left_tree->find(key) : std::nullopt;
     } else {
-        return find(n->right_tree, key);
+        return this->right_tree ? this->right_tree->find(key) : std::nullopt;
     }
 }
 
 template<typename K, typename V>
-bool binary_tree_node<K, V>::contains(const std::shared_ptr<binary_tree_node> &n, K key) {
-    if (n == nullptr || n->key == std::nullopt) {
-        return false;
-    } else if (n->key.value() == key) {
+bool binary_tree_node<K, V>::contains(K key) {
+    if (this->key == key) {
         return true;
-    } else if (n->key.value() > key) {
-        return contains(n->left_tree, key);
+    } else if (this->key > key) {
+        return this->left_tree && this->left_tree->contains(key);
     } else {
-        return contains(n->right_tree, key);
+        return this->right_tree && this->right_tree->contains(key);
     }
 }
 
 template<typename K, typename V>
-void binary_tree_node<K, V>::insert(std::shared_ptr<binary_tree_node> &n, K key, V value) {
-    if (n == nullptr) {
-        n = std::make_shared<binary_tree_node<K, V>>();
-    }
-    if (n->key == std::nullopt || n->key.value() == key) {
-        n->key = std::make_optional(key);
-        n->value = value;
-    } else if (n->key.value() > key) {
-        insert(n->left_tree, key, value);
-    } else {
-        insert(n->right_tree, key, value);
-    }
-}
-
-template<typename K, typename V>
-std::optional<V> binary_tree_node<K, V>::erase(std::shared_ptr<binary_tree_node> &n, K key) {
-    if (n == nullptr || n->key == std::nullopt) {
-        return std::nullopt;
-    } else if (n->key.value() > key) {
-        return erase(n->left_tree, key);
-    } else if (n->key.value() < key) {
-        return erase(n->right_tree, key);
-    } else {
-        std::optional<V> res;
-        if (n == nullptr) return std::nullopt;
-        if (n->left_tree == nullptr && n->right_tree == nullptr) {
-            res = n->value;
-            n.reset();
-            return res;
-        } else if ((n->left_tree == nullptr && n->right_tree != nullptr) ||
-                   (n->left_tree != nullptr && n->right_tree == nullptr)) {
-            if (n->left_tree == nullptr) {
-                res = n->value;
-                n = n->right_tree;
-                return res;
-            } else {
-                res = n->value;
-                n = n->left_tree;
-                return res;
-            }
+void binary_tree_node<K, V>::insert(K key, V value) {
+    if (this->key == key) {
+        this->value = value;
+    } else if (this->key > key) {
+        if (this->left_tree == nullptr) {
+            this->left_tree = std::make_unique<binary_tree_node<K, V>>(key, value);
         } else {
-            auto a = find_smallest(n->right_tree);
-
-            std::shared_ptr<binary_tree_node<K, V>> before;
-
-            if (a != n-> right_tree) {
-                before = find_smallest_before(n->right_tree, a);
-            }
-
-            std::swap(a->key, n->key);
-            std::swap(a->value, n->value);
-
-            auto value = a->value;
-
-            if (a == n->right_tree) {
-                n->right_tree.reset();
-            } else if (a == before->left_tree) {
-                before->left_tree.reset();
-            }
-
-
-            return value;
+            this->left_tree->insert(key, value);
+        }
+    } else {
+        if (this->right_tree == nullptr) {
+            this->right_tree = std::make_unique<binary_tree_node<K, V>>(key, value);
+        } else {
+            this->right_tree->insert(key, value);
         }
     }
 }
 
+template<typename K, typename V>
+std::optional<V> binary_tree_node<K, V>::erase(std::unique_ptr<binary_tree_node<K, V>> &n,K key) {
+    if (n == nullptr) return {};
+    if (n->key > key) {
+        return erase(n->left_tree, key);
+    } else if ((n->key < key)) {
+        return erase(n->right_tree, key);
+    } else {
+        // Only 0 child
+        if (n->left_tree == nullptr && n->right_tree == nullptr) {
+            auto res = n->value;
+            n.reset();
+            return res;
+        } else if ( n->left_tree == nullptr ^ n->right_tree == nullptr) {
+            // Only 1 child
+            auto res = n->value;
+
+            if (n->left_tree)  n = std::move(n->right_tree);
+            else n = std::move(n->left_tree);
+
+            return res;
+        } else {
+            // Two children
+            auto smallest = binary_tree_node<K,V>::find_leftmost(n->right_tree);
+
+            auto res = n->value;
+            n->key = std::move(smallest->key);
+            n->value = std::move(smallest->value);
+
+            smallest.reset();
+            return res;
+        }
+    }
+}
 #endif //CPP_TREES_BINARY_TREE_NODE_H

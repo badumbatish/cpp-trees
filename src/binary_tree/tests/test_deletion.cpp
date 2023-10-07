@@ -56,3 +56,21 @@ TEST(DELETION, full_child_deletion_size_4) {
     ASSERT_EQ(basic_tree.size(), 3);
 
 }
+
+TEST(DELETION, automatic_simple_deletion) {
+    binary_tree basic_tree = binary_tree<int, int>();
+    basic_tree.insert(1 ,1);
+    ASSERT_EQ(basic_tree.size(), 1);
+
+    for (int i = 2; i <= 100; i++) {
+        basic_tree.insert(i ,i);
+    }
+
+    for (int i = 2; i <= 100; i++) {
+        basic_tree.erase(i);
+        ASSERT_EQ(basic_tree.size(), 100-i+1);
+    }
+
+    ASSERT_EQ(basic_tree.size(), 1);
+
+}
