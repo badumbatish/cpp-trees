@@ -16,8 +16,6 @@ class binary_tree_node {
 public:
     static void insert(std::shared_ptr<binary_tree_node> &n, K key, V value);
 
-    static std::shared_ptr<binary_tree_node> find_node(const std::shared_ptr<binary_tree_node> &n, K key);
-
     static bool contains(const std::shared_ptr<binary_tree_node> &n, K key);
 
     static std::optional<V> find(const std::shared_ptr<binary_tree_node> &n, K key);
@@ -47,12 +45,6 @@ binary_tree_node<K, V>::find_smallest(const std::shared_ptr<binary_tree_node> &n
 /*
  * PUBLIC METHOD
  */
-template<typename K, typename V>
-std::shared_ptr<binary_tree_node<K, V>>
-binary_tree_node<K, V>::find_node(const std::shared_ptr<binary_tree_node> &n, K key) {
-
-}
-
 template<typename K, typename V>
 int64_t binary_tree_node<K, V>::size(std::shared_ptr<binary_tree_node> n) {
     int64_t tempSize{};
@@ -128,7 +120,6 @@ std::optional<V> binary_tree_node<K, V>::erase(std::shared_ptr<binary_tree_node>
                 return res;
             } else {
                 res = n->value;
-                auto tempNode = n;
                 n = n->left_tree;
                 return res;
             }
@@ -155,7 +146,6 @@ std::optional<V> binary_tree_node<K, V>::erase(std::shared_ptr<binary_tree_node>
 
             return value;
         }
-        return std::optional<V>();
     }
 }
 
