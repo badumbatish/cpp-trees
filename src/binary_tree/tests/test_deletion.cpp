@@ -65,12 +65,34 @@ TEST(DELETION, automatic_simple_deletion) {
     for (int i = 2; i <= 100; i++) {
         basic_tree.insert(i ,i);
     }
-
+    ASSERT_EQ(basic_tree.size(), 100);
     for (int i = 2; i <= 100; i++) {
         basic_tree.erase(i);
         ASSERT_EQ(basic_tree.size(), 100-i+1);
     }
 
+    for (int i = 2; i <= 100; i++) {
+        ASSERT_EQ(basic_tree.erase(i), std::nullopt);
+    }
     ASSERT_EQ(basic_tree.size(), 1);
+
+}
+
+TEST(DELETION, automatic_simple_deletion_2) {
+    binary_tree basic_tree = binary_tree<int, int>();
+    basic_tree.insert(1 ,1);
+    ASSERT_EQ(basic_tree.size(), 1);
+
+    for (int i = 2; i <= 100; i++) {
+        basic_tree.insert(i ,i);
+    }
+    ASSERT_EQ(basic_tree.size(), 100);
+
+    int64_t size = basic_tree.size();
+    for (int i = 2; i <= 100; i+=10) {
+        ASSERT_EQ(basic_tree.erase(i), i);
+        ASSERT_EQ(basic_tree.size(), size - 1);
+        size--;
+    }
 
 }

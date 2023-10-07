@@ -25,7 +25,6 @@ public:
 
     static std::optional<V> erase(std::unique_ptr<binary_tree_node<K, V>> &n, K key);
     static std::unique_ptr<binary_tree_node<K, V>> find_leftmost(std::unique_ptr<binary_tree_node<K, V>> &n);
-    static std::unique_ptr<binary_tree_node<K, V>> find_rightmost(std::unique_ptr<binary_tree_node<K, V>> &n);
 
 private:
 
@@ -35,16 +34,17 @@ template<typename K, typename V>
 std::unique_ptr<binary_tree_node<K, V>>
 binary_tree_node<K, V>::find_leftmost(std::unique_ptr<binary_tree_node<K, V>> &n) {
     if (n == nullptr) return nullptr;
-    else if (n->left_tree == nullptr) return std::move(n);
-    return find_leftmost(n->left_tree);
-}
+    else if (n->left_tree == nullptr) {
+        if (n->right_tree != nullptr) {
+            auto temp = std::move(n);
+            n = std::move(n->right_tree);
+            return temp;
+        } else {
+            return std::move(n);
+        }
 
-template<typename K, typename V>
-std::unique_ptr<binary_tree_node<K, V>>
-binary_tree_node<K, V>::find_rightmost(std::unique_ptr<binary_tree_node<K, V>> &n) {
-    if (n == nullptr) std::move(n);
-    else if (n->right_tree == nullptr) std::move(n);
-    return find_rightmost(n->right_tree);
+    }
+    return find_leftmost(n->left_tree);
 }
 /*
  * PUBLIC METHOD
@@ -117,8 +117,8 @@ std::optional<V> binary_tree_node<K, V>::erase(std::unique_ptr<binary_tree_node<
             // Only 1 child
             auto res = n->value;
 
-            if (n->left_tree)  n = std::move(n->right_tree);
-            else n = std::move(n->left_tree);
+            if (n->left_tree)  n = std::move(n->left_tree);
+            else n = std::move(n->right_tree);
 
             return res;
         } else {
